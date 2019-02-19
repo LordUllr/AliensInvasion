@@ -11,9 +11,9 @@ def check_keydown_events(event, ai_settings, screen, ship, bullets):
         ship.moving_right = True
     elif event.key == pygame.K_LEFT: #Move a espaçonave para a esquerda
         ship.moving_left = True
-    elif event.key == pygame.K_SPACE:
+    elif event.key == pygame.K_SPACE: #Inicia a função de projeteis
         fire_bullet(ai_settings, screen, ship, bullets)
-    elif event.key ==  pygame.K_q:
+    elif event.key ==  pygame.K_q: #Fecha o jogo
         sys.exit()
 
 
@@ -82,6 +82,9 @@ def check_bullet_alien_collisions(ai_settings, screen, stats, sb, ship, aliens, 
     #Remove qualquer projétil e alien que tenham colidido
     collisions = pygame.sprite.groupcollide(bullets, aliens, True, True)
     if collisions:
+        pygame.mixer.init()
+        pygame.mixer.music.load('Sounds/explosao.ogg')
+        pygame.mixer.music.play(0)
         for aliens in collisions.values():
             stats.score += ai_settings.alien_points * len(aliens)
             sb.prep_score()
@@ -111,6 +114,7 @@ def fire_bullet(ai_settings, screen, ship, bullets):
     if len(bullets) < ai_settings.bullets_allowed:
         new_bullet = Bullet(ai_settings, screen, ship)
         bullets.add(new_bullet)
+
 
 
 def get_number_aliens_x(ai_settings, alien_width):
@@ -172,7 +176,7 @@ def change_fleet_direction(ai_settings, aliens):
 
 
 def ship_hit(ai_settings, stats, screen, sb, ship, aliens, bullets):
-    """Responde ao fato de a nave ter seido atingida por um alien"""
+    """Responde ao fato de a nave ter sido atingida por um alien"""
     if stats.ships_left > 0:
         #Decrementa ships_left
         stats.ships_left -= 1
@@ -192,7 +196,7 @@ def ship_hit(ai_settings, stats, screen, sb, ship, aliens, bullets):
 
 
 def check_aliens_bottom(ai_settings, stats, screen, sb, ship, aliens, bullets):
-    """Verifica se algum alien tocar a parte inferior da terra."""
+    """Verifica se algum alien tocar a parte inferior da tela."""
     screen_rect = screen.get_rect()
     for alien in aliens.sprites():
         if alien.rect.bottom >= screen_rect.bottom:
@@ -205,4 +209,7 @@ def check_high_score(stats, sb):
     """Verifica se há uma nova pontuação maxima"""
     if stats.score > stats.high_score:
         stats.high_score = stats.score
+        with open('high_score.txt', 'w') as f_obj:
+            new_high_score = str(stats.high_score)
+            f_obj.write(new_high_score)
         sb.prep_high_score()
