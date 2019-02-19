@@ -12,7 +12,7 @@ class Scoreboard():
         self.ai_settings = ai_settings
         self.stats = stats
         #Configurações de fonte
-        self.text_color = (30, 30, 30)
+        self.text_color = (220, 20, 60)
         self.font = pygame.font.SysFont(None, 48)
         #Prepara as imagens das pontuações iniciais
         self.prep_high_score()
