@@ -17,6 +17,9 @@ class Bullet(Sprite):
         self.y = float(self.rect.y)
         self.color = ai_settings.bullet_color
         self.speed_factor = ai_settings.bullet_speed_factor
+        pygame.mixer.init(22050, 16, 2, 4096)
+        pygame.mixer.music.load('Sounds/bullet.ogg')
+        pygame.mixer.music.play(0)
 
 
     def update(self):
